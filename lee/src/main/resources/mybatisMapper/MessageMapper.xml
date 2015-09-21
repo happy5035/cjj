@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuan.lee.dao.MessageMapper" >
+  <resultMap id="BaseResultMap" type="com.yuan.lee.entity.Message" >
+    <id column="country" property="country" jdbcType="VARCHAR" />
+    <result column="firstname1" property="firstname1" jdbcType="VARCHAR" />
+    <result column="school" property="school" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    country, firstname1, school, weight
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from message
+    where country = #{country,jdbcType=VARCHAR}
+  </select>
+  
+   
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from message
+    where country = #{country,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yuan.lee.entity.Message" >
+    insert into message (country, firstname1, school, 
+      weight)
+    values (#{country,jdbcType=VARCHAR}, #{firstname1,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR}, 
+      #{weight,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuan.lee.entity.Message" >
+    insert into message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="firstname1 != null" >
+        firstname1,
+      </if>
+      <if test="school != null" >
+        school,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="firstname1 != null" >
+        #{firstname1,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null" >
+        #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuan.lee.entity.Message" >
+    update message
+    <set >
+      <if test="firstname1 != null" >
+        firstname1 = #{firstname1,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null" >
+        school = #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where country = #{country,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuan.lee.entity.Message" >
+    update message
+    set firstname1 = #{firstname1,jdbcType=VARCHAR},
+      school = #{school,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=VARCHAR}
+    where country = #{country,jdbcType=VARCHAR}
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from message
+    <if test="sortName != null" >
+      order by ${sortName}
+      <if test="sortOrder != null" >
+        ${sortOrder}
+      </if>
+    </if>
+  </select>
+   <select id="findByParams" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from message
+     where 1=1
+    <if test="firstname1 !=null">
+    and  firstname1 = #{firstname1,jdbcType=VARCHAR}
+    </if>
+    <if test="sortName != null" >
+      order by ${sortName}
+      <if test="sortOrder != null" >
+        ${sortOrder}
+      </if>
+    </if>
+    <if test="pageSize != null and startNum != null" >
+      limit #{pageSize} offset #{startNum}
+    </if>
+  </select>
+  <select id="findByParamsCount" resultType="int" parameterType="map" >
+    select count(*) from message
+     where 1=1
+    <if test="firstname1 !=null">
+    and  firstname1 = #{firstname1,jdbcType=VARCHAR}
+    </if>
+  </select>
+  
+  
+  
+</mapper>

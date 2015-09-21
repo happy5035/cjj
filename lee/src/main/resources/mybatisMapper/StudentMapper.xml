@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuan.lee.dao.StudentMapper" >
+  <resultMap id="BaseResultMap" type="com.yuan.lee.entity.Student" >
+    <id column="firstname" property="firstname" jdbcType="VARCHAR" />
+    <result column="lastname" property="lastname" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    firstname, lastname, phone
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from student
+    where firstname = #{firstname,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from student
+    where firstname = #{firstname,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yuan.lee.entity.Student" >
+    insert into student (firstname, lastname, phone
+      )
+    values (#{firstname,jdbcType=VARCHAR}, #{lastname,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuan.lee.entity.Student" >
+    insert into student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="firstname != null" >
+        firstname,
+      </if>
+      <if test="lastname != null" >
+        lastname,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="firstname != null" >
+        #{firstname,jdbcType=VARCHAR},
+      </if>
+      <if test="lastname != null" >
+        #{lastname,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuan.lee.entity.Student" >
+    update student
+    <set >
+      <if test="lastname != null" >
+        lastname = #{lastname,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where firstname = #{firstname,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuan.lee.entity.Student" >
+    update student
+    set lastname = #{lastname,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR}
+    where firstname = #{firstname,jdbcType=VARCHAR}
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from student
+    <if test="sortName != null" >
+      order by ${sortName}
+      <if test="sortOrder != null" >
+        ${sortOrder}
+      </if>
+    </if>
+  </select>
+  <select id="findByParams" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from student
+    where 1=1
+    <if test="firstname !=null">
+    and  firstname = #{firstname,jdbcType=VARCHAR}
+    </if>
+    <if test="sortName != null" >
+      order by ${sortName}
+      <if test="sortOrder != null" >
+        ${sortOrder}
+      </if>
+    </if>
+    <if test="pageSize != null and startNum != null" >
+      limit #{pageSize} offset #{startNum}
+    </if>
+  </select>
+     
+  <select id="findByParamsCount" resultType="int" parameterType="map" >
+    select count(*) from student
+    where 1=1
+    <if test="firstname !=null">
+    and  firstname = #{firstname,jdbcType=VARCHAR}
+    </if>
+    
+  </select>
+</mapper>
